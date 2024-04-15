@@ -14,6 +14,7 @@ package logics
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 
 	"configcenter/src/ac/iam"
@@ -116,8 +117,9 @@ func (lgc *Logics) ListSystemInstance(kit *rest.Kit, resourceType iam.TypeID, fi
 
 	cond := make(map[string]interface{})
 	if len(filter.Keyword) != 0 {
+		escapeString := regexp.QuoteMeta(filter.Keyword)
 		cond[GetResourceNameField(resourceType)] = map[string]interface{}{
-			common.BKDBLIKE:    filter.Keyword,
+			common.BKDBLIKE:    escapeString,
 			common.BKDBOPTIONS: "i",
 		}
 	}
@@ -141,8 +143,9 @@ func (lgc *Logics) ListBusinessInstance(kit *rest.Kit, resourceType iam.TypeID, 
 	}
 
 	if len(filter.Keyword) != 0 {
+		escapeString := regexp.QuoteMeta(filter.Keyword)
 		cond[GetResourceNameField(resourceType)] = map[string]interface{}{
-			common.BKDBLIKE:    filter.Keyword,
+			common.BKDBLIKE:    escapeString,
 			common.BKDBOPTIONS: "i",
 		}
 	}
@@ -177,7 +180,8 @@ func (lgc *Logics) ListModelInstance(kit *rest.Kit, resourceType iam.TypeID, fil
 	}
 
 	if len(filter.Keyword) != 0 {
-		cond[common.BKInstNameField] = map[string]interface{}{common.BKDBLIKE: filter.Keyword, common.BKDBOPTIONS: "i"}
+		escapeString := regexp.QuoteMeta(filter.Keyword)
+		cond[common.BKInstNameField] = map[string]interface{}{common.BKDBLIKE: escapeString, common.BKDBOPTIONS: "i"}
 	}
 
 	if filter.Parent == nil {
@@ -309,7 +313,8 @@ func (lgc *Logics) listHostInstanceFromDB(kit *rest.Kit, hostIDs []int64, page t
 		condition[common.BKHostIDField] = map[string]interface{}{common.BKDBIN: hostIDs}
 	}
 	if keyword != "" {
-		condition[common.BKHostInnerIPField] = map[string]interface{}{common.BKDBLIKE: keyword}
+		escapeString := regexp.QuoteMeta(keyword)
+		condition[common.BKHostInnerIPField] = map[string]interface{}{common.BKDBLIKE: escapeString}
 	}
 
 	input := &metadata.QueryInput{

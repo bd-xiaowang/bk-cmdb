@@ -132,7 +132,7 @@ make package
 解压cmdb.tar.gz，进入cmdb目录执行以下命令：
 
 ``` shell
-./image.sh -i <base_image>
+./image.sh
 ```
 
 **示例：**
